@@ -4,6 +4,10 @@
   var doc = document.documentElement;
   doc.classList.add("js");
 
+  /* Reloads start at the top instantly (no smooth-scroll replay of a restored position) */
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Sticky header shadow + back-to-top ---------- */

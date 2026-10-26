@@ -158,9 +158,8 @@ p { margin: 0 0 1.1em; }
 .site-header.scrolled { box-shadow: 0 10px 30px rgba(0,0,0,.25); }
 .site-header .wrap {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  height: var(--header-h); transition: height .35s var(--ease);
+  height: var(--header-h);
 }
-.site-header.scrolled .wrap { height: 68px; }
 
 /* Wordmark — modeled on the sandstone sign on Coates Street */
 .brand { display: inline-flex; flex-direction: column; align-items: flex-start; text-decoration: none; line-height: 1; }
@@ -435,7 +434,7 @@ p { margin: 0 0 1.1em; }
 .note { margin-top: 22px; padding: 16px 20px; background: var(--white); border-left: 3px solid var(--tan); border-radius: 0 var(--radius) var(--radius) 0; font-size: .95rem; color: var(--muted); }
 
 /* ---------- Contact ---------- */
-.contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 5vw, 70px); align-items: start; }
+.contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 5vw, 70px); align-items: stretch; }
 .contact-cards { display: grid; gap: 14px; }
 .contact-card {
   display: flex; gap: 18px; align-items: flex-start; padding: 22px 24px;
@@ -449,8 +448,8 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
 .contact-card .v { overflow-wrap: anywhere; display: block; font-size: 1.1rem; color: var(--ink); font-weight: 600; line-height: 1.4; }
 .contact-card .sub { display: block; font-size: .92rem; color: var(--muted); }
 
-.map-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--paper-2); }
-.map-wrap iframe { display: block; width: 100%; height: 420px; border: 0; filter: grayscale(.35) sepia(.15); }
+.map-wrap { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--paper-2); min-height: 320px; }
+.map-wrap iframe { display: block; width: 100%; height: 100%; min-height: 320px; position: absolute; inset: 0; border: 0; filter: grayscale(.35) sepia(.15); }
 
 /* ---------- CTA band ---------- */
 .cta-band { position: relative; overflow: hidden; background: linear-gradient(115deg, var(--maroon-deep) 0%, var(--maroon) 60%, var(--maroon-bright) 100%); color: var(--white); padding: clamp(56px, 7vw, 88px) 0; }
@@ -601,7 +600,7 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
   .credentials li, .credentials li:nth-child(odd) { border-left: 0; padding: 18px 0; }
   .credentials li + li { border-top: 1px solid var(--line-dark); }
   .hero-actions .btn, .cta-actions .btn { width: 100%; }
-  .map-wrap iframe { height: 320px; }
+  .map-wrap iframe { height: 320px; position: static; }
   .gallery { grid-template-columns: 1fr; grid-auto-rows: 220px; }
   .g-a, .g-b, .g-c, .g-d, .g-e { grid-column: span 1; grid-row: span 1; }
   .g-b { grid-row: span 2; }

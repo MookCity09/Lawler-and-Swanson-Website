@@ -109,32 +109,27 @@
     Object.keys(map).forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
   }
 
-  /* ---------- Contact form → opens the visitor's email app ---------- */
-  var form = document.getElementById("contact-form");
-  if (form) {
-    var params = new URLSearchParams(window.location.search);
-    var preset = params.get("area");
-    if (preset && form.elements.topic) {
-      [].forEach.call(form.elements.topic.options, function (o) { if (o.value === preset) o.selected = true; });
-    }
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!form.reportValidity()) return;
-      var f = form.elements;
-      var subject = "Consultation request: " + (f.topic.value || "General question") + " — " + f.name.value;
-      var body =
-        "Name: " + f.name.value + "\n" +
-        "Phone: " + (f.phone.value || "—") + "\n" +
-        "Email: " + f.email.value + "\n" +
-        "Topic: " + (f.topic.value || "General question") + "\n" +
-        "Best way to reach me: " + f.prefer.value + "\n\n" +
-        f.message.value;
-      var href = "mailto:lawlerandswanson@iabar.org?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      window.location.href = href;
-      var status = document.getElementById("form-status");
-      if (status) status.textContent = "Your email app should open with your message ready to send. If it doesn't, please call (319) 346-2650.";
+  /* ---------- Copy-to-clipboard buttons (email address) ---------- */
+  [].forEach.call(document.querySelectorAll("[data-copy]"), function (btn) {
+    var label = btn.querySelector("span");
+    var original = label ? label.textContent : "";
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy");
+      function done(ok) {
+        if (label) label.textContent = ok ? "Copied" : "Press Ctrl+C to copy";
+        setTimeout(function () { if (label) label.textContent = original; }, 2200);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta); done(ok);
+      }
     });
-  }
+  });
 
   /* ---------- Footer year ---------- */
   [].forEach.call(document.querySelectorAll("[data-year]"), function (el) { el.textContent = new Date().getFullYear(); });

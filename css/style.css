@@ -647,13 +647,23 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
 .choose-new p { color: var(--muted); }
 .choose-new .small { color: var(--muted); }
 .big-call {
-  display: flex; align-items: center; gap: 16px; text-decoration: none; color: var(--ink);
-  font-family: var(--serif); font-weight: 600; font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.1;
-  padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-  transition: color .25s;
+  display: flex; align-items: center; justify-content: center; gap: 16px; text-decoration: none;
+  color: var(--white); background: var(--maroon); border: 1px solid var(--maroon); border-radius: var(--radius);
+  font-family: var(--serif); font-weight: 700; font-size: clamp(1.9rem, 4.2vw, 2.6rem); line-height: 1.1;
+  font-variant-numeric: lining-nums tabular-nums; letter-spacing: 0.02em;
+  padding: 20px 28px; margin: 8px 0 6px; box-shadow: var(--shadow);
+  position: relative; overflow: hidden; isolation: isolate;
+  transition: color .3s var(--ease), transform .3s var(--ease), box-shadow .3s;
 }
-.big-call svg { width: 34px; height: 34px; color: var(--maroon); flex: none; }
-.big-call:hover { color: var(--maroon); }
+.big-call::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--maroon-deep); transform: scaleX(0); transform-origin: right;
+  transition: transform .45s var(--ease);
+}
+.big-call svg { width: 30px; height: 30px; color: var(--sand); flex: none; }
+.big-call:hover { color: var(--white); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.big-call:hover::after { transform: scaleX(1); transform-origin: left; }
+.big-call:focus-visible { outline: 3px solid var(--tan); outline-offset: 3px; }
 .choose-portal { background: var(--ink); color: var(--on-dark); border-top: 4px solid var(--maroon); box-shadow: var(--shadow-lift); position: relative; overflow: hidden; }
 .choose-portal::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 90% 0%, rgba(122,29,43,.5), transparent 60%); pointer-events: none; }
 .choose-portal > * { position: relative; }

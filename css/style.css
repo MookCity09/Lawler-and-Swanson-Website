@@ -143,6 +143,7 @@ p { margin: 0 0 1.1em; }
 .utility a:hover { color: var(--sand); }
 .utility-group { display: flex; gap: 26px; align-items: center; }
 .utility-group span, .utility-group a { display: inline-flex; align-items: center; gap: 7px; }
+.utility-group .addr { display: inline; }
 .utility svg { width: 14px; height: 14px; color: var(--tan); }
 
 .site-header {

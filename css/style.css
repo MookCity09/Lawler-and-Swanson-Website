@@ -548,7 +548,7 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
   .nav .btn .num-txt { display: inline; }
   .nav .btn .call-txt::after { content: ""; }
   .photo-stack { margin-right: 14px; }
-  .utility .hide-sm, .utility .hide-md { display: none; }
+  .utility .hide-sm { display: none; }
   .nav-toggle { display: block; }
   .nav {
     position: fixed; left: 0; right: 0; top: var(--nav-top, 110px); height: calc(100vh - var(--nav-top, 110px)); height: calc(100dvh - var(--nav-top, 110px));
@@ -625,7 +625,7 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .utility-group.right { gap: 22px; }
-@media (max-width: 1080px) { .utility .hide-md { display: none; } }
+@media (max-width: 620px) { .utility .addr-more { display: none; } }
 
 /* Call-to-action card */
 .choose { display: grid; grid-template-columns: minmax(0, 760px); justify-content: center; gap: 24px; }

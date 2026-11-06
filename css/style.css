@@ -40,6 +40,14 @@
   --shadow-lift: 0 2px 4px rgba(19, 16, 17, 0.08), 0 18px 40px rgba(19, 16, 17, 0.12);
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --header-h: 84px;
+
+  /* Motion: deliberate, like a signature. Things draw, settle and stay. Nothing bounces. */
+  --ease-ink: cubic-bezier(0.65, 0, 0.35, 1);   /* lines being drawn: slow start, slow finish */
+  --dur-quick: .3s;                               /* hover colour changes */
+  --dur-base: .45s;                               /* lifts, sweeps, small moves */
+  --dur-slow: .9s;                                /* reveals and headings */
+  --dur-draw: 1.4s;                               /* lines, rules and photo reveals */
+  --line-step: .1s;                               /* delay between heading lines */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -218,25 +226,31 @@ p { margin: 0 0 1.1em; }
   background: var(--ink); color: var(--on-dark);
   padding: clamp(64px, 9vw, 120px) 0 clamp(72px, 10vw, 130px);
 }
-.hero::before {
-  /* the sandstone sign, heavily darkened, as quiet texture */
-  content: ""; position: absolute; inset: -4%;
-  background: url("../images/office-sign.jpg") center/cover no-repeat;
-  opacity: 0.12; filter: grayscale(0.3) contrast(1.1);
-  animation: slowdrift 30s ease-in-out infinite alternate;
-}
+/* Survey grid behind the hero: Iowa's one-mile sections, drawn once on load, then still */
+.plat { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.plat line { stroke: rgba(230,192,180,.15); stroke-width: 1; animation: draw 1.1s var(--ease-ink) both; animation-delay: var(--d, 0s); }
+.plat line.twp { stroke: rgba(230,192,180,.3); }
+.plat text { font: 600 8px/1 var(--sans); fill: rgba(230,192,180,.24); letter-spacing: .04em; animation: fadeIn 1s var(--ease) 1.2s both; }
 .hero::after {
-  content: ""; position: absolute; inset: 0;
+  content: ""; position: absolute; inset: 0; pointer-events: none;
   background:
     radial-gradient(ellipse at 15% 20%, rgba(122,29,43,.42), transparent 55%),
     radial-gradient(ellipse at 90% 90%, rgba(92,19,32,.25), transparent 50%),
-    linear-gradient(90deg, rgba(19,16,17,.96) 0%, rgba(19,16,17,.82) 55%, rgba(19,16,17,.6) 100%);
+    linear-gradient(90deg, rgba(19,16,17,.95) 0%, rgba(19,16,17,.74) 52%, rgba(19,16,17,.3) 100%);
 }
 @keyframes slowdrift { from { transform: scale(1.02) translate(0,0); } to { transform: scale(1.08) translate(-1.5%, -1%); } }
 
 .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(40px, 6vw, 80px); align-items: center; }
 .hero h1 { color: var(--white); font-weight: 500; }
-.hero h1 em { font-style: italic; color: var(--sand); font-weight: 500; }
+.hero h1 em { position: relative; font-style: italic; color: var(--sand); font-weight: 500; white-space: nowrap; }
+/* maroon ink line under "families, farms", drawn last */
+/* Uncovered left to right with a clip (a dash-based draw slides along the line in some browsers) */
+.ink-line {
+  position: absolute; left: -2%; bottom: -.1em; width: 104%; height: .3em; overflow: visible; pointer-events: none;
+  clip-path: inset(-6px 100% -6px -6px); animation: inkWipe 1.1s var(--ease-ink) 2.2s forwards;
+}
+.ink-line path { fill: none; stroke: var(--maroon-bright); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+@keyframes inkWipe { to { clip-path: inset(-6px -6px -6px -6px); } }
 .hero .lead { font-size: 1.2rem; color: var(--on-dark-muted); max-width: 34em; margin-bottom: 34px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
 
@@ -245,14 +259,26 @@ p { margin: 0 0 1.1em; }
   position: relative; border-radius: var(--radius); overflow: hidden;
   box-shadow: 0 30px 60px rgba(0,0,0,.45);
   clip-path: inset(0 0 100% 0);
-  animation: unveil 1.4s var(--ease) .5s forwards;
+  animation: unveil 1.4s var(--ease) 1.1s forwards;
 }
-.hero-figure img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; transform: scale(1.08); animation: settle 2.4s var(--ease) .5s forwards; }
-.hero-figure::before {
-  content: ""; position: absolute; inset: 22px -22px -22px 22px;
-  border: 1px solid var(--tan); border-radius: var(--radius); opacity: .6;
-}
+.hero-figure img { width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; transform: scale(1.08); animation: settle 2.4s var(--ease) 1.1s forwards; }
+/* The offset outline behind the photo, drawn like a property boundary with a marker at each corner */
+.hero-figure .bounds { position: absolute; left: 22px; top: 22px; width: 100%; height: 100%; pointer-events: none; }
+.bounds .edge { position: absolute; background: var(--tan); opacity: .75; }
+.bounds .e1 { left: 0; top: 0; width: 100%; height: 1px; transform-origin: left; animation: edgeX .45s var(--ease-ink) .9s both; }
+.bounds .e2 { left: 100%; top: 0; width: 1px; height: 100%; transform-origin: top; animation: edgeY .45s var(--ease-ink) 1.25s both; }
+.bounds .e3 { left: 0; top: 100%; width: 100%; height: 1px; transform-origin: right; animation: edgeX .45s var(--ease-ink) 1.6s both; }
+.bounds .e4 { left: 0; top: 0; width: 1px; height: 100%; transform-origin: bottom; animation: edgeY .45s var(--ease-ink) 1.95s both; }
+.bounds .mark { position: absolute; width: 13px; height: 13px; margin: -6px 0 0 -6px; animation: markSet .5s var(--ease) both; }
+.bounds .mark::before, .bounds .mark::after { content: ""; position: absolute; background: var(--sand); }
+.bounds .mark::before { left: 6px; top: 0; width: 1px; height: 13px; }
+.bounds .mark::after { left: 0; top: 6px; width: 13px; height: 1px; }
+.bounds .m1 { left: 0; top: 0; animation-delay: .9s; }
+.bounds .m2 { left: 100%; top: 0; animation-delay: 1.25s; }
+.bounds .m3 { left: 100%; top: 100%; animation-delay: 1.6s; }
+.bounds .m4 { left: 0; top: 100%; animation-delay: 1.95s; }
 .hero-figure figcaption {
+  opacity: 0; transform: translateY(18px); animation: rise .9s var(--ease) 2.1s forwards;
   position: absolute; left: -28px; bottom: 28px; z-index: 2;
   background: var(--paper); color: var(--ink); padding: 14px 20px; border-radius: var(--radius);
   box-shadow: var(--shadow-lift); font-size: 0.88rem; line-height: 1.35;
@@ -268,7 +294,8 @@ p { margin: 0 0 1.1em; }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
 /* ---------- Credentials strip ---------- */
-.credentials { background: var(--ink-2); color: var(--on-dark); border-top: 1px solid var(--line-dark); }
+.credentials { background: var(--ink-2); color: var(--on-dark); }
+.credentials .furrows { height: 60px; margin-bottom: -10px; }
 .credentials ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
 .credentials li { padding: 28px 24px; border-left: 1px solid var(--line-dark); }
 .credentials li:first-child { border-left: 0; padding-left: 0; }
@@ -286,7 +313,8 @@ p { margin: 0 0 1.1em; }
   content: ""; position: absolute; inset: 0;
   background: var(--hero-img, url("../images/office-street.jpg")) center/cover no-repeat;
   opacity: .16; filter: grayscale(.4);
-  transform: scale(1.05); animation: slowdrift 30s ease-in-out infinite alternate;
+  /* drifts once and then rests, instead of looping forever */
+  transform: scale(1.05); animation: slowdrift 24s var(--ease) forwards;
 }
 .page-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(19,16,17,.95), rgba(19,16,17,.7)); }
 .page-hero .wrap { position: relative; z-index: 1; }
@@ -338,15 +366,14 @@ p { margin: 0 0 1.1em; }
 /* ---------- Split / about block ---------- */
 .split-block { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 90px); align-items: center; }
 .split-block.reverse > :first-child { order: 2; }
-.photo-stack { position: relative; }
+/* isolation keeps the maroon accent (z-index -1) behind the photo but above the section background,
+   even after the reveal animation's transform is removed */
+.photo-stack { position: relative; isolation: isolate; }
 .photo-stack img { border-radius: var(--radius); box-shadow: var(--shadow-lift); width: 100%; object-fit: cover; }
 .photo-stack .accent {
-  position: absolute; right: -14px; bottom: -14px; width: 46%; aspect-ratio: 1;
+  /* same size as the photo, offset down and right so only the right and bottom edges show (echoes the hero) */
+  position: absolute; inset: 18px -18px -18px 18px;
   background: var(--maroon); border-radius: var(--radius); z-index: -1; opacity: .9;
-}
-.photo-stack .badge {
-  position: absolute; left: 20px; bottom: -14px; top: auto; background: rgba(14,10,11,.92); color: var(--on-dark);
-  padding: 10px 16px; border-radius: var(--radius); font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
 }
 .checklist { list-style: none; padding: 0; margin: 24px 0 32px; display: grid; gap: 14px; }
 .checklist li { display: flex; gap: 14px; align-items: flex-start; }
@@ -355,10 +382,17 @@ p { margin: 0 0 1.1em; }
 .checklist span { color: var(--muted); font-size: .98rem; }
 
 /* ---------- Approach (numbered) ---------- */
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: step; }
+.steps { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; counter-reset: step; }
 .step { padding: 8px 36px 8px 0; position: relative; }
-.step + .step { padding-left: 36px; border-left: 1px solid var(--line-dark); }
-.step .n { font-family: var(--serif); font-size: 3.4rem; line-height: 1; color: var(--sand); opacity: .9; display: block; margin-bottom: 14px; font-weight: 500; }
+.step + .step { padding-left: 36px; }
+.step .n { position: relative; font-family: var(--serif); font-size: 3.4rem; line-height: 1; color: var(--sand); display: block; width: fit-content; padding-right: 16px; background: var(--ink); margin-bottom: 14px; font-weight: 500; }
+/* A hairline runs from 01 to 03; each number lights up as the line reaches it */
+.steps .track { position: absolute; left: 0; right: 0; top: calc(8px + 1.7rem); height: 1px; background: var(--line-dark); pointer-events: none; }
+.steps .track i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--maroon-bright), var(--sand)); transform-origin: left; }
+.js .steps .track i { transform: scaleX(0); transition: transform 1.8s cubic-bezier(.45, 0, .25, 1) .15s; }
+.js .steps.in .track i { transform: none; }
+.js .steps .step .n { color: rgba(230,192,180,.25); transition: color .6s var(--ease) calc(var(--d, 0s) + .2s); }
+.js .steps .step.in .n { color: var(--sand); }
 .step h3 { color: var(--white); }
 .step p { color: var(--on-dark-muted); margin: 0; }
 
@@ -548,7 +582,7 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
   .site-header { background: var(--ink); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .nav .btn .num-txt { display: inline; }
   .nav .btn .call-txt::after { content: ""; }
-  .photo-stack { margin-right: 14px; }
+  .photo-stack { margin-right: 18px; margin-bottom: 18px; }
   .utility .hide-sm { display: none; }
   .nav-toggle { display: block; }
   .nav {
@@ -618,8 +652,6 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
 .profile-body > div + div { margin-top: 40px; }
 .profile-body .eyebrow { margin-bottom: 8px; }
 
-.credentials { background: var(--ink-2); border-top: 1px solid var(--maroon); }
-
 /* ==========================================================================
    Call-to-action blocks
    ========================================================================== */
@@ -655,13 +687,6 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
 .big-call:hover { color: var(--white); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
 .big-call:hover::after { transform: scaleX(1); transform-origin: left; }
 .big-call:focus-visible { outline: 3px solid var(--tan); outline-offset: 3px; }
-  display: flex; align-items: center; justify-content: center; gap: 14px; text-decoration: none;
-  min-height: 76px; padding: 18px 28px; border-radius: var(--radius);
-  background: var(--maroon); color: var(--white); border: 1px solid var(--maroon-bright);
-  font: 600 clamp(1.1rem, 2.2vw, 1.35rem)/1.2 var(--sans); letter-spacing: .02em; text-align: center;
-  box-shadow: 0 10px 28px rgba(0,0,0,.35);
-  transition: background .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
-}
 
 .copy-btn { display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--maroon); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .copy-btn svg { display: none; }
@@ -693,4 +718,192 @@ a.contact-card:hover { border-color: var(--tan); transform: translateX(4px); box
   .nav-toggle { width: 48px; height: 48px; }
 }
 
-@media (max-width: 920px) { .photo-stack .badge { display: none; } }
+
+/* ==========================================================================
+   Motion redesign
+   One signature moment per screen; everything else stays quiet.
+   All of it switches off under prefers-reduced-motion (see the end).
+   ========================================================================== */
+
+@keyframes draw { from { stroke-dasharray: 1; stroke-dashoffset: 1; } to { stroke-dasharray: 1; stroke-dashoffset: 0; } }
+@keyframes fadeIn { from { opacity: 0; } }
+@keyframes edgeX { from { transform: scaleX(0); } }
+@keyframes edgeY { from { transform: scaleY(0); } }
+@keyframes markSet { from { opacity: 0; transform: scale(0) rotate(-45deg); } }
+@keyframes lineUp { from { transform: translateY(110%); } }
+
+/* ---------- Page-to-page transitions (browsers without support simply skip them) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+/* the top bar and header stay put while the page beneath cross-fades (desktop only, so the phone menu is untouched) */
+@media (min-width: 921px) {
+  .utility { view-transition-name: utility; }
+  .site-header { view-transition-name: site-header; }
+}
+::view-transition-old(root) { animation: vtOut .25s var(--ease) both; }
+::view-transition-new(root) { animation: vtIn .45s var(--ease) both; }
+@keyframes vtOut { to { opacity: 0; } }
+@keyframes vtIn { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- Headings rise line by line (main.js splits them into .ln lines) ---------- */
+.lines .ln { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+.lines .ln > span { display: block; }
+.js .reveal.has-lines { transform: none; }
+.js .has-lines .lines .ln > span {
+  transform: translateY(110%);
+  transition: transform var(--dur-slow) var(--ease) calc(var(--d, 0s) + var(--li, 0) * var(--line-step));
+}
+.js .has-lines.in .lines .ln > span { transform: none; }
+.lines-load .ln > span { animation: lineUp .95s var(--ease) both; animation-delay: calc(.2s + var(--li, 0) * var(--line-step)); }
+
+/* The short rule before each label draws out as its section arrives */
+.js .reveal .eyebrow::before { transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease) calc(var(--d, 0s) + .1s); }
+.js .reveal.in .eyebrow::before { transform: none; }
+
+/* ---------- Practice cards: featured Agricultural Law + icons that act out their subject ---------- */
+.practice-card.feature { grid-row: span 2; background: var(--ink); color: var(--on-dark); border-color: transparent; padding: 40px 34px 34px; }
+.practice-card.feature:hover { color: var(--on-dark); }
+.practice-card.feature h3 { color: var(--white); font-size: clamp(1.8rem, 2.6vw, 2.2rem); }
+.practice-card.feature p { color: var(--on-dark-muted); font-size: 1.04rem; flex: 0 0 auto; }
+.practice-card.feature .icon { width: 66px; height: 66px; background: var(--ink-3); color: var(--sand); }
+.practice-card.feature .icon svg { width: 34px; height: 34px; }
+.practice-card.feature:hover .icon { background: var(--maroon); color: var(--white); }
+.practice-card.feature .why { margin-top: auto; padding: 18px 0 16px; border-top: 1px solid var(--line-dark); font-size: .92rem; line-height: 1.5; color: var(--sand); }
+.practice-card.feature .text-link { color: var(--sand); }
+
+.icon svg { overflow: visible; }
+.icon .leaf { transform-box: fill-box; }
+.icon .leaf.r { transform-origin: 0 100%; }
+.icon .leaf.l { transform-origin: 100% 100%; }
+.icon .beam { transform-box: view-box; transform-origin: 12px 7px; }
+.icon .fold { transform-box: fill-box; transform-origin: 0 100%; }
+:is(.practice-card:hover, .practice-card:focus-visible, .act) .icon .draw { animation: draw .7s var(--ease-ink) both; animation-delay: var(--d, 0s); }
+:is(.practice-card:hover, .practice-card:focus-visible, .act) .icon .leaf { animation: sprout .55s var(--ease) both; animation-delay: var(--d, 0s); }
+:is(.practice-card:hover, .practice-card:focus-visible, .act) .icon .beam { animation: weigh 1.6s ease-in-out both; }
+:is(.practice-card:hover, .practice-card:focus-visible, .act) .icon .fold { animation: foldIn .6s var(--ease) both; }
+@keyframes sprout { from { transform: scale(0); } }
+@keyframes weigh { 0% { transform: rotate(0); } 22% { transform: rotate(-9deg); } 50% { transform: rotate(5deg); } 75% { transform: rotate(-2deg); } 100% { transform: rotate(0); } }
+@keyframes foldIn { from { opacity: 0; transform: scale(0); } }
+
+/* ---------- Staff headshots (placeholders until the photos arrive; same file names, 800 x 1000) ---------- */
+.headshot { position: relative; margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--ink); }
+.headshot img { width: 100%; height: 100%; object-fit: cover; transition: scale 1.2s var(--ease); }
+.headshot::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--maroon-bright);
+  transform: scaleX(0); transform-origin: left; transition: transform .6s var(--ease);
+}
+.person.has-photo { padding: 0 0 28px; overflow: hidden; }
+.person.has-photo .headshot { margin-bottom: 22px; }
+.person.has-photo > :not(.headshot) { padding-left: 26px; padding-right: 26px; }
+.person:hover .headshot img { scale: 1.04; }
+.person:hover .headshot::after { transform: scaleX(1); }
+.profile-card .headshot-lg { margin: -36px -32px 26px; border-bottom: 1px solid var(--line-dark); }
+/* Portraits uncover one after another, the same way the office photo is revealed on the home page */
+.js .reveal .headshot { clip-path: inset(100% 0 0 0); transition: clip-path 1.2s var(--ease) var(--d, 0s); }
+.js .reveal.in .headshot { clip-path: inset(0 0 0 0); }
+.js .reveal .headshot img { transform: scale(1.1); transition: transform 1.8s var(--ease) var(--d, 0s), scale 1.2s var(--ease); }
+.js .reveal.in .headshot img { transform: none; }
+
+/* ---------- About: the three "How we practice" cards each draw a short rule ---------- */
+.person.value { position: relative; }
+.person.value::before { content: ""; position: absolute; left: 30px; top: 0; width: 48px; height: 3px; background: var(--maroon); }
+.js .person.value::before { transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease) calc(var(--d, 0s) + .35s); }
+.js .person.value.in::before { transform: none; }
+
+/* ---------- Furrow lines: contour-plough rows standing in for plain rules ---------- */
+.furrows { display: block; width: 100%; height: 40px; overflow: visible; }
+/* stroke width is in drawing units; the 140-unit-tall drawing is squashed to ~55px, so ~2.4 renders near 1px */
+.furrows path { fill: none; stroke: var(--tan); stroke-width: 2.4; }
+.js .furrows path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s var(--ease-ink); transition-delay: calc(var(--i) * .12s); }
+.js .furrows.in path { stroke-dashoffset: 0; }
+
+/* ---------- Footer: faint survey grid and furrows ---------- */
+.site-footer {
+  background-color: var(--black);
+  background-image:
+    linear-gradient(rgba(230,192,180,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230,192,180,.035) 1px, transparent 1px);
+  background-size: 96px 96px;
+  background-position: center top;
+}
+/* same size and strength as the furrows above the credentials strip on the home page */
+.footer-furrows { height: 60px; margin-top: 10px; }
+.footer-main { padding-top: 40px; }
+
+/* ---------- Attorney & Staff: the timeline draws downward and each year fills in ---------- */
+.timeline { position: relative; }
+.js .timeline::before {
+  content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 1px; background: var(--maroon);
+  transform: scaleY(0); transform-origin: top; transition: transform 1.6s var(--ease-ink) .2s;
+}
+.js .reveal.in .timeline::before { transform: none; }
+.js .reveal .timeline li::before { transition: background-color .4s var(--ease) calc(.4s + var(--i, 0) * .5s); }
+.js .reveal.in .timeline li::before { background-color: var(--maroon); }
+
+/* ---------- Practice Areas: one marker slides between sections in the side list ---------- */
+.toc ul { position: relative; }
+.toc .toc-marker {
+  position: absolute; left: -1px; top: 0; width: 2px; height: 0; background: var(--maroon);
+  opacity: 0; pointer-events: none;
+  transition: transform .5s var(--ease), height .5s var(--ease), opacity .3s var(--ease);
+}
+.toc .toc-marker.on { opacity: 1; }
+@media (min-width: 921px) { .toc.has-marker a.active { border-left-color: transparent; } }
+@media (max-width: 920px) { .toc .toc-marker { display: none; } }
+
+/* ---------- Community: photos uncover with a short wipe; click to see one larger ---------- */
+.js .gallery figure.reveal { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path 1.1s var(--ease-ink) var(--d, 0s); }
+.js .gallery figure.reveal.in { clip-path: inset(0 0 0 0); }
+.gallery figure[role="button"] { cursor: zoom-in; }
+.gallery figure:focus-visible { outline: 2px solid var(--maroon); outline-offset: 3px; }
+.lightbox {
+  width: min(1100px, 100% - 32px); max-height: calc(100% - 32px); padding: 0; border: 0; border-radius: var(--radius);
+  background: var(--black); color: var(--on-dark); box-shadow: 0 30px 80px rgba(0,0,0,.5); overflow: hidden;
+}
+.lightbox::backdrop { background: rgba(11,9,9,.82); }
+.lightbox[open] { animation: lbIn .4s var(--ease) both; }
+.lightbox figure { margin: 0; }
+.lightbox img { display: block; width: 100%; max-height: calc(100vh - 140px); object-fit: contain; background: var(--black); }
+.lightbox figcaption { padding: 14px 64px 16px 20px; font-size: .95rem; color: var(--on-dark-muted); border-top: 1px solid var(--line-dark); }
+.lightbox .lb-close {
+  position: absolute; right: 8px; bottom: 6px; width: 44px; height: 44px; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: transparent; color: var(--sand); cursor: pointer;
+}
+.lightbox .lb-close:hover { background: var(--ink-3); }
+.lightbox .lb-close svg { width: 20px; height: 20px; }
+@keyframes lbIn { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+
+/* ---------- Contact: map warms to full colour; copy button confirms with a drawn check ---------- */
+.map-wrap iframe { transition: filter .6s var(--ease); }
+.map-wrap:hover iframe, .map-wrap:focus-within iframe { filter: none; }
+.copy-btn .ok { display: none; }
+.copy-btn.copied .ok { display: inline-block; width: 14px; height: 14px; margin-left: 6px; vertical-align: -2px; }
+.copy-btn.copied .ok path { animation: draw .5s var(--ease-ink) both; }
+
+/* ---------- Call-to-action band: the phone gives one small ring as the band appears ---------- */
+.js .cta-band .reveal.in .btn svg { animation: ring 1s var(--ease) .8s 1 both; }
+@keyframes ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-12deg); } 30% { transform: rotate(10deg); }
+  45% { transform: rotate(-7deg); } 60% { transform: rotate(4deg); } 75% { transform: rotate(-2deg); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 620px) { .plat text { fill: rgba(230,192,180,.12); } }
+@media (max-width: 920px) {
+  .steps .track { display: none; }
+  .practice-card.feature { grid-column: 1 / -1; grid-row: auto; }
+  .profile-card .headshot-lg { max-height: 520px; }
+}
+
+/* ---------- Reduced motion: a still, complete site ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal .headshot, .js .gallery figure.reveal { clip-path: none; }
+  .js .reveal .headshot img { transform: none; }
+  .js .furrows path { stroke-dasharray: none; }
+  .js .steps .track i, .js .timeline::before, .js .reveal .eyebrow::before, .js .person.value::before { transform: none; }
+  .js .steps .step .n { color: var(--sand); }
+  .hero-figure figcaption { opacity: 1; transform: none; }
+  .ink-line { clip-path: none; }
+}

@@ -6,7 +6,7 @@
   <title>Attorney &amp; Staff | Lawler &amp; Swanson, P.L.C.</title>
   <meta name="description" content="Meet attorney Amy K. Swanson, J.D., and the staff of Lawler & Swanson, P.L.C. in Parkersburg, Iowa.">
   <meta name="author" content="AH Website Design">
-  <meta name="theme-color" content="#fbf9f6">
+  <meta name="theme-color" content="#f2e9db">
   <link rel="canonical" href="https://www.lawlerandswanson.com/staff.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Attorney &amp; Staff | Lawler &amp; Swanson, P.L.C.">
@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=15">
   <!-- Analytics: the old Universal Analytics tag (UA-138181092-1) stopped collecting data in 2023.
        To track visits, create a GA4 property and paste its gtag snippet here. -->
 </head>
@@ -61,15 +61,27 @@
   </svg>
     </section>
 
-    <section class="sec attorney">
+    <section class="sec attorney no-photo">
       <div class="wrap">
-        <figure class="portrait watch">
-          <div class="pic">
-            <span class="bounds" aria-hidden="true"><span class="e e1"></span><span class="e e2"></span><span class="e e3"></span><span class="e e4"></span><span class="m m1"></span><span class="m m2"></span><span class="m m3"></span><span class="m m4"></span></span>
-            <div class="frame"><img src="images/staff-amy-swanson.jpg" alt="Amy K. Swanson, J.D., attorney" width="800" height="1000" decoding="async"></div>
-          </div>
-          <figcaption><span>Amy K. Swanson, J.D.</span><span>Attorney</span></figcaption>
-        </figure>
+        <!--
+          HEADSHOT REMOVED FOR NOW (Amy K. Swanson, attorney). Add it back once her photo is available.
+          How it should look:
+          - File: images/staff-amy-swanson.jpg, a 4:5 portrait, 800 x 1000 px, about 100 to 150 KB.
+          - Layout: portrait on the left (about 5 of 12 columns), all of the text in one column on the right.
+          - Style: the photo uncovers upward as it scrolls into view and settles; a thin tan outline sits
+            22px down and right of it with a small maroon cross at each corner, traced corner to corner;
+            a caption line ("Amy K. Swanson, J.D." / "Attorney") runs beneath. The styles (.portrait,
+            .pic, .bounds, .frame) are still in css/style.css and js/main.js still animates them.
+          To restore: remove the "no-photo" class from this section, paste the figure below as the
+          first child of .wrap, and merge the two text columns that follow into a single div.
+          <figure class="portrait watch">
+            <div class="pic">
+              <span class="bounds" aria-hidden="true"><span class="e e1"></span><span class="e e2"></span><span class="e e3"></span><span class="e e4"></span><span class="m m1"></span><span class="m m2"></span><span class="m m3"></span><span class="m m4"></span></span>
+              <div class="frame"><img src="images/staff-amy-swanson.jpg" alt="Amy K. Swanson, J.D., attorney" width="800" height="1000" decoding="async"></div>
+            </div>
+            <figcaption><span>Amy K. Swanson, J.D.</span><span>Attorney</span></figcaption>
+          </figure>
+        -->
         <div>
           <div class="reveal">
             <span class="kicker">Attorney</span>
@@ -77,6 +89,8 @@
           </div>
           <p class="role reveal" style="--d:.1s">Attorney</p>
           <p class="bio reveal" style="--d:.15s">Amy K. Swanson was admitted to the Iowa Bar in 1994. Her practice centers on the legal needs of rural Iowa &mdash; agricultural law, wills, trusts and estate planning, probate, real estate, and taxation. She has served as President of the American Agricultural Law Association, a national organization of professionals working in agricultural law.</p>
+        </div>
+        <div class="side">
           <ul class="creds-list" data-stagger="0.15" data-stagger-rules>
             <li><b>Admitted</b><span>Iowa Bar, 1994</span></li>
             <li><b>Law School</b><span>Drake University Law School, J.D. with honors, 1994</span></li>
@@ -103,15 +117,26 @@
           <div><span class="kicker">Staff</span><h2>Our staff</h2>
           <p>Experienced, friendly, and often the first voice you'll hear when you call.</p></div>
         </div>
-        <div class="team" data-stagger="0.18">
-          <article><div class="shot"><img src="images/staff-jodie-jensen-scoles.jpg" alt="Jodie Jensen-Scoles, legal assistant" width="800" height="1000" loading="lazy" decoding="async"></div><div class="cap"><div class="r">Legal Assistant &middot; Since 2015</div><h3>Jodie Jensen-Scoles</h3><p>Jodie has been with the firm since 2015 and brings more than 24 years of legal assistant experience to Lawler &amp; Swanson, P.L.C. She lives in Aplington and enjoys camping and fishing with her husband, children and step-children, and seven grandchildren.</p></div></article>
-          <article><div class="shot"><img src="images/staff-debra-oelmann.jpg" alt="Debra Oelmann, legal assistant" width="800" height="1000" loading="lazy" decoding="async"></div><div class="cap"><div class="r">Legal Assistant &middot; Since 1985</div><h3>Debra Oelmann</h3><p>Debra has worked with the firm since 1985 and is now a part-time legal assistant, working primarily with income taxes. She enjoys reading and spending time with her granddaughters.</p></div></article>
-          <article><div class="shot"><img src="images/staff-joshua-haan.jpg" alt="Joshua Haan, tax assistant" width="800" height="1000" loading="lazy" decoding="async"></div><div class="cap"><div class="r">Tax Assistant &middot; Since 2020</div><h3>Joshua Haan</h3><p>Joshua has worked part time with the firm since 2020. An Iowa State University graduate with a B.S. in Agricultural Studies, Joshua is also a farmer and assists with income tax preparation.</p></div></article>
+        <!--
+          STAFF HEADSHOTS REMOVED FOR NOW. Add them back once the photos are available.
+          Files: images/staff-jodie-jensen-scoles.jpg, images/staff-debra-oelmann.jpg and
+          images/staff-joshua-haan.jpg, each a 4:5 portrait, 800 x 1000 px, about 100 to 150 KB.
+          How it should look: a photo above each name, in a row of three cards; each photo uncovers
+          upward in turn as the row scrolls into view, zooms in slightly on hover and grows a maroon
+          bar along its bottom edge. The styles (.team, .shot, .cap) are still in css/style.css.
+          To restore: change this grid's class from "values people" to "team", then give each card this
+          shape (keeping its current role, name and text inside .cap):
+          <article><div class="shot"><img src="images/staff-jodie-jensen-scoles.jpg" alt="Jodie Jensen-Scoles, legal assistant" width="800" height="1000" loading="lazy" decoding="async"></div><div class="cap"><div class="r">Legal Assistant</div><h3>Jodie Jensen-Scoles</h3><p>...</p></div></article>
+        -->
+        <div class="values people" data-stagger="0.12">
+          <article><div class="r">Legal Assistant &middot; Since 2015</div><h3>Jodie Jensen-Scoles</h3><p>Jodie has been with the firm since 2015 and brings more than 24 years of legal assistant experience to Lawler &amp; Swanson, P.L.C. She lives in Aplington and enjoys camping and fishing with her husband, children and step-children, and seven grandchildren.</p></article>
+          <article><div class="r">Legal Assistant &middot; Since 1985</div><h3>Debra Oelmann</h3><p>Debra has worked with the firm since 1985 and is now a part-time legal assistant, working primarily with income taxes. She enjoys reading and spending time with her granddaughters.</p></article>
+          <article><div class="r">Tax Assistant &middot; Since 2020</div><h3>Joshua Haan</h3><p>Joshua has worked part time with the firm since 2020. An Iowa State University graduate with a B.S. in Agricultural Studies, Joshua is also a farmer and assists with income tax preparation.</p></article>
         </div>
       </div>
     </section>
 
-    <section class="sec memorial">
+    <section class="sec memorial band-dark">
       <div class="wrap reveal">
         <div class="orn" aria-hidden="true">&#10022;</div>
         <span class="kicker">In Memoriam</span>
@@ -121,7 +146,7 @@
       </div>
     </section>
 
-    <section class="close">
+    <section class="close after-tint">
       <div class="wrap">
         <div class="panel watch">
           <div>

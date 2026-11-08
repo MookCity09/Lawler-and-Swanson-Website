@@ -146,13 +146,13 @@ p { margin: 0; }
 .mast .call {
   position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; gap: 10px;
-  font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; white-space: nowrap;
-  padding: 10px 16px; border: 1px solid var(--rule-2); transition: border-color .3s, color .3s;
+  font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; white-space: nowrap;
+  padding: 10px 16px; background: var(--maroon); border: 1px solid var(--maroon); transition: border-color .3s, box-shadow .3s;
 }
-.mast .call::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--maroon); transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
-.mast .call:hover { border-color: var(--maroon); color: #fff; }
+.mast .call::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--maroon-3); transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
+.mast .call:hover { border-color: var(--maroon-3); color: #fff; box-shadow: 0 6px 16px rgba(122, 29, 43, .22); }
 .mast .call:hover::after { transform: scaleX(1); transform-origin: left; }
-.mast .call svg { width: 15px; height: 15px; color: var(--maroon); transition: color .3s; }
+.mast .call svg { width: 15px; height: 15px; color: var(--sand); transition: color .3s; }
 .mast .call:hover svg { color: #fff; }
 
 .mast nav { border-top: 1px solid var(--rule); }
@@ -259,13 +259,13 @@ p { margin: 0; }
 .visit .phone { font-family: var(--serif); font-size: 28px; line-height: 1.15; color: var(--maroon) !important; }
 .visit p { margin-top: auto; padding-top: var(--s2); border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--muted); }
 .hero .furrows { margin-top: clamp(48px, 6vw, 72px); }
-.hero-foot { background: var(--tan-bg); padding-bottom: clamp(32px, 4vw, 48px); }
-.facts { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--rule); margin-top: -6px; }
-.facts div { position: relative; padding: var(--s3) var(--s3) var(--s3) 0; }
-.facts div + div { padding-left: var(--s3); }
+.hero-foot { background: var(--tan-bg); padding: clamp(24px, 3vw, 40px) 0 clamp(64px, 7vw, 104px); }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); }
+.facts div { position: relative; padding: var(--s4) var(--s4) var(--s4) 0; }
+.facts div + div { padding-left: var(--s4); }
 .facts div + div::before { content: ""; position: absolute; left: 0; top: var(--s3); bottom: var(--s3); width: 1px; background: var(--rule); transform-origin: top; }
-.facts b { display: block; font-family: var(--serif); font-weight: 400; font-size: 38px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
-.facts span { display: block; font-size: 13.5px; color: var(--muted); margin-top: var(--s1); line-height: 1.5; }
+.facts b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 4.2vw, 58px); line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.facts span { display: block; font-size: 14.5px; color: var(--muted); margin-top: var(--s2); line-height: 1.55; max-width: 18em; }
 
 /* ==========================================================================
    Inner page hero
@@ -446,7 +446,7 @@ p { margin: 0; }
 .bullets { list-style: none; padding: 0; margin: var(--s3) 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; }
 .bullets li { position: relative; padding-left: 22px; color: var(--muted); }
 .bullets li::before { content: ""; position: absolute; left: 0; top: .78em; width: 10px; height: 1px; background: var(--maroon-3); }
-.detail .note { margin-top: var(--s3); padding: 16px 20px; background: var(--cream); border-left: 3px solid var(--maroon); font-size: 15px; color: var(--muted); }
+.detail .note { margin-top: var(--s3); font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 44em; }
 
 /* ==========================================================================
    Contact page
@@ -499,21 +499,26 @@ p { margin: 0; }
 .close h2 { font-size: clamp(30px, 3vw, 42px); margin-bottom: var(--s2); }
 .close p { color: var(--muted); font-size: 17px; }
 .close .right { text-align: right; }
-.close .num { display: block; font-family: var(--serif); font-size: clamp(34px, 3.6vw, 50px); line-height: 1; color: var(--ink); text-decoration: none; margin-bottom: var(--s3); white-space: nowrap; transition: color .3s; }
-.close .num:hover { color: var(--maroon); }
+.close .big-call { margin: 0; }
 
 /* ==========================================================================
    Footer
    ========================================================================== */
 .site-footer {
   background-color: var(--ink);
-  background-image: linear-gradient(rgba(230, 192, 180, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(230, 192, 180, .035) 1px, transparent 1px);
-  background-size: 96px 96px;
-  color: #bdb2ae; font-size: 14.5px; padding-top: 18px;
+  /* top band: the colour of the section above, showing above the top furrow line; then the dark grid */
+  background-image: linear-gradient(var(--above, var(--paper)), var(--above, var(--paper))), linear-gradient(rgba(230, 192, 180, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(230, 192, 180, .035) 1px, transparent 1px);
+  background-size: 100% 48px, 96px 96px, 96px 96px;
+  background-repeat: no-repeat, repeat, repeat;
+  color: #bdb2ae; font-size: 14.5px;
 }
-.site-footer .furrows { height: 60px; margin-bottom: -6px; }
+.site-footer .furrows { height: 64px; }
 .site-footer .furrows path { stroke: rgba(230, 192, 180, .45); }
-.site-footer .furrows path.top { stroke: rgba(230, 192, 180, .8); }
+.site-footer .furrows path.top { stroke: var(--maroon-3); }
+/* Above the top furrow the footer shows the colour of the section before it; below, the dark footer */
+.site-footer .furrows path.fill { fill: var(--ink); }
+.above-tan { --above: var(--tan-bg); }
+.above-cream { --above: var(--paper); }
 .site-footer .cols { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--s4); padding: var(--s5) 0; }
 .site-footer .brand { color: #f6f1ee; }
 .site-footer .brand b i { color: #d9a9a2; }
@@ -662,7 +667,7 @@ p { margin: 0; }
 /* Panels: the maroon rule draws; the phone gives one small ring */
 .js .close .panel::before, .js .call-card::before { transform: scaleX(0); transition: transform 1.2s var(--ease-ink) .2s; }
 .js .close .panel.in::before, .js .call-card.in::before { transform: scaleX(1); }
-.js .close .panel.in .btn svg, .js .call-card.in .big-call svg { animation: ring 1s var(--ease) 1s 1 both; }
+.js .close .panel.in .big-call svg, .js .call-card.in .big-call svg { animation: ring 1s var(--ease) 1s 1 both; }
 
 /* Page-to-page cross-fade (browsers without support simply skip it) */
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }

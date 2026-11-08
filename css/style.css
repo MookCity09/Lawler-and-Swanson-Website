@@ -516,7 +516,7 @@ p { margin: 0; }
 .site-footer .furrows path { stroke: rgba(230, 192, 180, .45); }
 .site-footer .furrows path.top { stroke: var(--maroon-3); }
 /* Above the top furrow the footer shows the colour of the section before it; below, the dark footer */
-.site-footer .furrows path.fill { fill: var(--ink); }
+.site-footer .furrows path.fill { fill: var(--ink); stroke: none; }
 .above-tan { --above: var(--tan-bg); }
 .above-cream { --above: var(--paper); }
 .site-footer .cols { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--s4); padding: var(--s5) 0; }
